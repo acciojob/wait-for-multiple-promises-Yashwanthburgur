@@ -1,4 +1,5 @@
 const createPromise = (num) => {
+  // random delay between 1 and 3 seconds
   const delay = Number((Math.random() * 2 + 1).toFixed(3));
 
   return new Promise((resolve) => {
@@ -22,6 +23,8 @@ const promises = [
 
 Promise.all(promises).then((results) => {
   const table = document.getElementById("output");
+
+  // remove the default Loading... row
   table.innerHTML = "";
 
   // Add rows for each promise
