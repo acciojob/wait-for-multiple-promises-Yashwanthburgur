@@ -1,5 +1,4 @@
 const createPromise = (num) => {
-  // random delay between 1 and 3 seconds
   const delay = Number((Math.random() * 2 + 1).toFixed(3));
 
   return new Promise((resolve) => {
@@ -12,8 +11,8 @@ const createPromise = (num) => {
   });
 };
 
-// Start time before Promise.all
-const start = performance.now();
+// Measure actual time Promise.all takes
+const totalStart = performance.now();
 
 const promises = [
   createPromise(1),
@@ -24,18 +23,18 @@ const promises = [
 Promise.all(promises).then((results) => {
   const table = document.getElementById("output");
 
-  // remove the default Loading... row
+  // REMOVE ONLY the loading row
   table.innerHTML = "";
 
-  // Add rows for each promise
-  results.forEach((result) => {
+  // Fill each promise row
+  results.forEach((res) => {
     const row = table.insertRow();
-    row.insertCell().textContent = result.name;
-    row.insertCell().textContent = result.time.toFixed(3);
+    row.insertCell().textContent = res.name;
+    row.insertCell().textContent = res.time.toFixed(3);
   });
 
-  // REAL elapsed time after all promises resolve
-  const totalTime = ((performance.now() - start) / 1000).toFixed(3);
+  // Total actual time (NOT max delay)
+  const totalTime = ((performance.now() - totalStart) / 1000).toFixed(3);
 
   const totalRow = table.insertRow();
   totalRow.insertCell().textContent = "Total";
