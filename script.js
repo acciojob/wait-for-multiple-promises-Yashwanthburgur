@@ -34,8 +34,7 @@ Promise.all(promises)
     });
     
     // Calculate actual total time taken by Promise.all
-    const totalTime = (performance.now() - totalStart) / 1000;
     const totalRow = table.insertRow();
-    totalRow.insertCell().textContent = 'Total';
-    totalRow.insertCell().textContent = totalTime.toFixed(3);
+	totalRow.insertCell().textContent = 'Total';
+	totalRow.insertCell().textContent = maxTime.toFixed(3);
   });
