@@ -1,20 +1,18 @@
-// Store resolve time for each promise
 const createPromise = (num) => {
-  const start = performance.now();
-  const delay = Number((Math.random() * 2 + 1).toFixed(3)) * 1000;
+  const delay = Number((Math.random() * 2 + 1).toFixed(3));
   
   return new Promise((resolve) => {
     setTimeout(() => {
-      const resolveTime = (performance.now() - start) / 1000;
       resolve({
         name: `Promise ${num}`,
-        time: resolveTime
+        time: delay
       });
-    }, delay);
+    }, delay * 1000);
   });
 };
 
-const startAll = performance.now();
+// Track total start time for Promise.all
+const totalStart = performance.now();
 const promises = [createPromise(1), createPromise(2), createPromise(3)];
 
 Promise.all(promises)
@@ -22,19 +20,21 @@ Promise.all(promises)
     const table = document.getElementById('output');
     table.innerHTML = '';
     
-    let totalTime = 0;
+    let maxTime = 0;
     
+    // Display each promise's random delay as time taken
     results.forEach((result) => {
       const row = table.insertRow();
       row.insertCell().textContent = result.name;
       row.insertCell().textContent = result.time.toFixed(3);
       
-      if (result.time > totalTime) {
-        totalTime = result.time;
+      if (result.time > maxTime) {
+        maxTime = result.time;
       }
     });
     
-    // Add total row
+    // Calculate actual total time taken by Promise.all
+    const totalTime = (performance.now() - totalStart) / 1000;
     const totalRow = table.insertRow();
     totalRow.insertCell().textContent = 'Total';
     totalRow.insertCell().textContent = totalTime.toFixed(3);
