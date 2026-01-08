@@ -1,56 +1,31 @@
-const createPromise = (num) => {
-  const delay = Number((Math.random() * 2 + 1).toFixed(3));
-  
+const output = document.getElementById("output");
+
+const createPromise = (index) => {
+  const time = Math.random() * 2 + 1; // Between 1 and 3
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve({
-        name: `Promise ${num}`,
-        time: delay.toFixed(3)  // FIX: Format to 3 decimals
-      });
-    }, delay * 1000);
+      resolve({ name: `Promise ${index}`, time: time.toFixed(3) });
+    }, time * 1000);
   });
 };
 
-// Create 3 promises
-const promises = [
-  createPromise(1),
-  createPromise(2),
-  createPromise(3)
-];
+const promises = [createPromise(1), createPromise(2), createPromise(3)];
 
-// Start timing
-const totalStart = performance.now();
+const startTime = Date.now();
 
-// Wait for all promises
-Promise.all(promises)
-  .then((results) => {
-    const totalEnd = performance.now();
-    const totalTime = ((totalEnd - totalStart) / 1000).toFixed(3);
-    
-    // Get the output table body
-    const output = document.getElementById('output');
-    
-    // Clear loading row
-    output.innerHTML = '';
-    
-    // Add each promise result
-    results.forEach((result) => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td>${result.name}</td>
-        <td>${result.time}</td>
-      `;
-      output.appendChild(row);
-    });
-    
-    // Add TOTAL row
-    const totalRow = document.createElement('tr');
-    totalRow.innerHTML = `
-      <td>Total</td>
-      <td>${totalTime}</td>
-    `;
-    output.appendChild(totalRow);
-  })
-  .catch((error) => {
-    console.error('Error:', error);
+Promise.all(promises).then((results) => {
+  const totalTime = (Date.now() - startTime) / 1000;
+  
+  // 1. Remove loading row
+  output.innerHTML = "";
+
+  // 2. Add individual rows
+  results.forEach((res) => {
+    const row = `<tr><td>${res.name}</td><td>${res.time}</td></tr>`;
+    output.innerHTML += row;
   });
+
+  // 3. Add total row
+  const totalRow = `<tr><td>Total</td><td>${totalTime.toFixed(3)}</td></tr>`;
+  output.innerHTML += totalRow;
+});
